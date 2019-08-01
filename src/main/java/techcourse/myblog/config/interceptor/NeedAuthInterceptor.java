@@ -1,4 +1,4 @@
-package techcourse.myblog.config;
+package techcourse.myblog.config.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
