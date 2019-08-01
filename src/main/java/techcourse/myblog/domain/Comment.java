@@ -18,11 +18,14 @@ public class Comment extends EntityDates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Lob
     private String content;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "ARTICLE_ID", foreignKey = @ForeignKey(name = "FK_ARTICLE_TO_COMMENT"))
     @OnDelete(action = OnDeleteAction.CASCADE)
