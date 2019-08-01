@@ -4,7 +4,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import techcourse.myblog.exception.NotMatchAuthenticationException;
 
 import javax.persistence.*;
@@ -12,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @EqualsAndHashCode(of = {"id"}, callSuper = false)
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class Comment extends EntityDates {
     @Id
@@ -25,10 +25,11 @@ public class Comment extends EntityDates {
     private User user;
     @ManyToOne
     @JoinColumn(name = "ARTICLE_ID", foreignKey = @ForeignKey(name = "FK_ARTICLE_TO_COMMENT"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Article article;
 
     @Builder
-    public Comment(final String content, final User user, final Article article) {
+    private Comment(final String content, final User user, final Article article) {
         this.content = content;
         this.user = user;
         this.article = article;
