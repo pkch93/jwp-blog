@@ -19,22 +19,21 @@ public class CommentController {
     }
 
     @PostMapping
-    public RedirectView createComment(@PathVariable final Long articleId, HttpSession session, String content) {
-        commentService.create(articleId, (User) session.getAttribute("user"), content);
+    public RedirectView createComment(@PathVariable final Long articleId, User user, String content) {
+        commentService.create(articleId, user, content);
         return new RedirectView("/articles/" + articleId);
     }
 
     @DeleteMapping("/{commentId}")
-    public RedirectView deleteComment(@PathVariable final Long articleId, @PathVariable final Long commentId,
-                                      HttpSession session) {
-        commentService.delete(commentId, (User) session.getAttribute("user"));
+    public RedirectView deleteComment(@PathVariable final Long articleId, @PathVariable final Long commentId, User user) {
+        commentService.delete(commentId, user);
         return new RedirectView("/articles/" + articleId);
     }
 
     @PutMapping("/{commentId}")
     public RedirectView updateComment(@PathVariable final Long articleId, @PathVariable final Long commentId,
-                                      HttpSession session, String content) {
-        commentService.update(commentId, (User) session.getAttribute("user"), content);
+                                      User user, String content) {
+        commentService.update(commentId, user, content);
         return new RedirectView("/articles/" + articleId);
     }
 }

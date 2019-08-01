@@ -42,12 +42,11 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public RedirectView createArticle(@Valid ArticleDto articleDto, Errors errors, HttpSession session) {
+    public RedirectView createArticle(@Valid ArticleDto articleDto, Errors errors, User user) {
         if (errors.hasErrors()) {
             throw new ArticleInputException("입력값이 잘못되었습니다.");
         }
 
-        User user = (User) session.getAttribute("user");
         articleDto.setAuthor(user);
         Article article = articleService.create(articleDto);
 
@@ -66,23 +65,23 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/{articleId}/edit")
-    public String showArticleEditPage(@PathVariable Long articleId, Model model, HttpSession session) {
-        Article article = articleService.findById(articleId, (User) session.getAttribute("user"));
+    public String showArticleEditPage(@PathVariable Long articleId, Model model, User user) {
+        Article article = articleService.findById(articleId, user);
         model.addAttribute("article", article);
 
         return "article-edit";
     }
 
     @PutMapping("/articles/{articleId}")
-    public RedirectView updateArticle(@PathVariable Long articleId, ArticleDto articleDto, HttpSession session) {
-        Article updateArticle = articleService.update(articleDto, articleId, (User) session.getAttribute("user"));
+    public RedirectView updateArticle(@PathVariable Long articleId, ArticleDto articleDto, User user) {
+        Article updateArticle = articleService.update(articleDto, articleId, user);
 
         return new RedirectView("/articles/" + updateArticle.getId());
     }
 
     @DeleteMapping("/articles/{articleId}")
-    public RedirectView deleteArticle(@PathVariable Long articleId, HttpSession session) {
-        articleService.delete(articleId, (User) session.getAttribute("user"));
+    public RedirectView deleteArticle(@PathVariable Long articleId, User user) {
+        articleService.delete(articleId, user);
         return new RedirectView("/");
     }
 
