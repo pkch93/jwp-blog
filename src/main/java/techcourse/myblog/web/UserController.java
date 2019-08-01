@@ -53,39 +53,38 @@ public class UserController {
         return new RedirectView("/users/signup");
     }
 
-    @GetMapping(path = {"/{email}", "/{email}/edit"})
-    public String showMyPageEdit(@PathVariable String email, HttpServletRequest req, Model model) {
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-
+    @GetMapping("/{email}")
+    public String showMyPage(@PathVariable String email, User user, Model model) {
+        ;
         User authenticatedUser = userService.getAuthenticatedUser(email, user.getEmail());
         model.addAttribute("user", authenticatedUser);
 
-        if (req.getRequestURI().contains("edit")) {
-            return "mypage-edit";
-        }
         return "mypage";
     }
 
+    @GetMapping("/{email}/edit")
+    public String showMyPageEdit(@PathVariable String email, User user, Model model) {
+        User authenticatedUser = userService.getAuthenticatedUser(email, user.getEmail());
+        model.addAttribute("user", authenticatedUser);
+
+        return "mypage-edit";
+    }
+
     @PutMapping("/{email}")
-    public RedirectView myPageEdit(@PathVariable String email, @Valid UserDto userDto, Errors errors, HttpSession session) {
+    public RedirectView myPageEdit(@PathVariable String email, User user, HttpSession session,
+                                   @Valid UserDto userDto, Errors errors) {
         if (errors.hasErrors()) {
             throw new UpdateUserInputException("잘못된 입력값입니다.");
         }
 
-        User user = (User) session.getAttribute("user");
-        User updatedUser = userService.update(userDto, email, user.getEmail());
+        userService.update(userDto, email, user.getEmail(), session);
 
-        session.setAttribute("username", updatedUser.getName());
         return new RedirectView("/users/" + email);
     }
 
     @DeleteMapping("/{email}")
-    public RedirectView exitUser(@PathVariable String email, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-
+    public RedirectView exitUser(@PathVariable String email, User user, HttpSession session) {
         userService.exit(email, user.getEmail(), session);
-
         return new RedirectView("/");
     }
 

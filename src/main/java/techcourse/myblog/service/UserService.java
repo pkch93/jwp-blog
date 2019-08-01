@@ -41,10 +41,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User update(UserDto userDto, String email, String sessionEmail) {
+    public User update(UserDto userDto, String email, String sessionEmail, HttpSession session) {
         User authenticatedUser = getAuthenticatedUser(email, sessionEmail);
         User user = userTranslator.toEntity(authenticatedUser, userDto);
 
+        session.setAttribute("user", user);
         return userRepository.save(user);
     }
 
