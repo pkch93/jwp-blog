@@ -96,7 +96,6 @@ class ArticleControllerTest {
                 .expectBody()
                 .consumeWith(res ->
                         webTestClient.put().uri(res.getResponseHeaders().getLocation())
-                                .header("cookie", jSessionId)
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                                 .body(BodyInserters.fromFormData("title", updateTitle)
                                         .with("coverUrl", updateImage)
@@ -130,7 +129,6 @@ class ArticleControllerTest {
                 .exchange()
                 .expectBody()
                 .consumeWith(res -> webTestClient.delete().uri(res.getResponseHeaders().getLocation())
-                        .header("cookie", jSessionId)
                         .exchange()
                         .expectStatus().is3xxRedirection());
     }

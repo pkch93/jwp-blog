@@ -1,24 +1,21 @@
 package techcourse.myblog.translator;
 
 import techcourse.myblog.domain.Article;
-import techcourse.myblog.domain.User;
 import techcourse.myblog.dto.ArticleDto;
 
 public class ArticleTranslator implements ModelTranslator<Article, ArticleDto> {
     @Override
     public Article toEntity(final Article article, final ArticleDto articleDto) {
         Long id = processValue(article.getId(), articleDto.getId());
-        String title = updateValue(article.getTitle(), articleDto.getTitle());
-        String coverUrl = updateValue(article.getCoverUrl(), articleDto.getCoverUrl());
-        String contents = updateValue(article.getContents(), articleDto.getContents());
-        User user = updateValue(article.getAuthor(), articleDto.getAuthor());
+        String title = updateValue(articleDto.getTitle(), article.getTitle());
+        String coverUrl = updateValue(articleDto.getCoverUrl(), article.getCoverUrl());
+        String contents = updateValue(articleDto.getContents(), article.getContents());
 
         return Article.builder()
                 .id(id)
                 .title(title)
                 .coverUrl(coverUrl)
                 .contents(contents)
-                .author(user)
                 .build();
     }
 
