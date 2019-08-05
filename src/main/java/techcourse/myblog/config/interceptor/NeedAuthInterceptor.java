@@ -1,4 +1,4 @@
-package techcourse.myblog.config;
+package techcourse.myblog.config.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -11,7 +11,7 @@ public class NeedAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(final HttpServletRequest req, final HttpServletResponse res, final Object handler) throws Exception {
         HttpSession session = req.getSession();
-        if (session.getAttribute("username") != null) {
+        if (session.getAttribute("user") != null) {
             res.sendRedirect("/");
             return false;
         }
